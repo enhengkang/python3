@@ -1,38 +1,32 @@
 #import json
 from dbconn import lyncmysql
 
-dbconfig = {'host': '10.10.3.128',
-            'port': 3306,
-            'user': 'repl',
-            'passwd': '123',
-            'db': 'python',
-            'charset': 'utf8'}
-sql = 'select name,age,connection from user order by name  desc '
-db = lyncmysql(dbconfig)
 
-def decorator(func):
-    sqladmin = 'select user,passwd from admin'
-    sqlrst = db.query(sqladmin)
-    if len(sqlrst) == 0:
-        try:
-            admininfo = input('请输入管理员账号密码，以：分割>>>').split(':')
-            db.dml("insert into admin(user,passwd) values('{}','{}')".format(admininfo[0],admininfo[1]))
-        except IndexError as e:
-            print('错误，请以：分割！已退出')
-            exit()
-    else:
-        def wapper(*args):
-            _user ,_passwd = sqlrst[0]
-            passwd = input("请输入管理员密码：")
-            cnt = 0
-            while passwd != _passwd:
-                cnt += 1
-                passwd = input("密码错误请重新输入>>>")
-                if cnt>1:
-                    print("密码错误超过3次，强制退出。。。")
-                    exit()
-            return func(*args)
-        return wapper
+
+def
+    def decorator(func):
+        sqladmin = 'select user,passwd from admin'
+        sqlrst = db.query(sqladmin)
+        if len(sqlrst) == 0:
+            try:
+                admininfo = input('请输入管理员账号密码，以：分割>>>').split(':')
+                db.dml("insert into admin(user,passwd) values('{}','{}')".format(admininfo[0],admininfo[1]))
+            except IndexError as e:
+                print('错误，请以：分割！已退出')
+                exit()
+        else:
+            def wapper(*args):
+                _user ,_passwd = sqlrst[0]
+                passwd = input("请输入管理员密码：")
+                cnt = 0
+                while passwd != _passwd:
+                    cnt += 1
+                    passwd = input("密码错误请重新输入>>>")
+                    if cnt>1:
+                        print("密码错误超过3次，强制退出。。。")
+                        exit()
+                return func(*args)
+            return wapper
 
 def useradmin():
     sqladmin = 'select user,passwd from admin'
@@ -117,6 +111,16 @@ def find_user(username):
     else:
         input('用户不存在！ enter键继续。。。')
 if __name__ == '__main__':
+
+    dbconfig = {'host': '10.32.6.5',
+                'port': 3306,
+                'user': 'repl',
+                'passwd': '123',
+                'db': 'python',
+                'charset': 'utf8'}
+    sql = 'select name,age,connection from user order by name  desc '
+    db = lyncmysql(dbconfig)
+
     useradmin()
     list1 =['exit','delete', 'update', 'find', 'list','add']
     method = {
